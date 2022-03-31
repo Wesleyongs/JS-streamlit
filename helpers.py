@@ -39,7 +39,6 @@ def get_line_items(row):
 
 
 def add_discount(df):
-    if df['Delivery Fee'] > 0:
-        df['line_items'] = df['line_items'].append(
-            {"title": 'shipping', "name": 'shipping', "quantity": 1, "price": int(df['Delivery Fee'])})
+    df.append(
+        {"title": 'shipping', "name": 'shipping', "quantity": 1, "price": 4})
     return df
