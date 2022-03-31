@@ -84,51 +84,51 @@ if livestream_file:
         df['Delivery Fee'] > 0, df['line_items'].apply(add_discount), df['line_items'])
     st.write(df)
 
-    # if upload:
-    #     for index, row in df.iterrows():
+    if upload:
+        for index, row in df.iterrows():
 
-    #         payload = {}
+            payload = {}
 
-    #         payload['note'] = "Buyer Name: " + str(row['Buyer FB']) + "\n Delivery Method: " + str(
-    #             row['Delivery Method']) + "\n Delivery Instruction: " + str(row['Delivery Instruction'])
-    #         if pd.notna(row['Email']):
-    #             payload['email'] = row['Email']
-    #         payload['name'] = f"#IG{shop}{str(index+starting_order_num).zfill(4)}"
-    #         payload["shipping_address"] = {
-    #             "address1": row["Buyer Address"],
-    #             "phone": row["Contact No."],
-    #             "zip": row["Postal Code"],
-    #             "city": "Singapore",
-    #             "name": row["Delivery Name"],
-    #             "country": "Singapore",
-    #             "country_code": "SG",
-    #         }
-    #         payload['line_items'] = row['line_items']
-    #     #     payload["customer"] = {
-    #     #         "email": row['Email'],
-    #     #         "first_name": row["Delivery Name"]
-    #     #     }
+            payload['note'] = "Buyer Name: " + str(row['Buyer FB']) + "\n Delivery Method: " + str(
+                row['Delivery Method']) + "\n Delivery Instruction: " + str(row['Delivery Instruction'])
+            if pd.notna(row['Email']):
+                payload['email'] = row['Email']
+            payload['name'] = f"#IG{shop}{str(index+starting_order_num).zfill(4)}"
+            payload["shipping_address"] = {
+                "address1": row["Buyer Address"],
+                "phone": row["Contact No."],
+                "zip": row["Postal Code"],
+                "city": "Singapore",
+                "name": row["Delivery Name"],
+                "country": "Singapore",
+                "country_code": "SG",
+            }
+            payload['line_items'] = row['line_items']
+        #     payload["customer"] = {
+        #         "email": row['Email'],
+        #         "first_name": row["Delivery Name"]
+        #     }
 
-    #         # POST
-    #         url = f"https://{apikey}:{password}@{hostname}/admin/api/2021-01/orders.json"
-    #         order = {"order": payload}
-    #         # print(payload)
-    #         try:
-    #             data = (requests.post(url, json=order))
-    #             print("+++"*30)
-    #             if data.status_code != 201:
-    #                 st.error(
-    #                     f"Error with #IG{shop}{str(index+starting_order_num).zfill(4)} \n code:{data.status_code} \n {data.text}")
-    #                 print(
-    #                     payload['name'] + f" success \n code:{data.status_code} \n {data.text}")
-    #                 break
-    #             else:
-    #                 st.success(
-    #                     f"Done with #IG{shop}{str(index+starting_order_num).zfill(4)}")
-    #                 print(payload['name'] + " success")
-    #         except Exception as e:
-    #             print(e)
-    #             st.error(
-    #                 f"Error with #IG{shop}{str(index+starting_order_num).zfill(4)} \n {e}")
-    #             break
-    #     #     print(data.text)
+            # POST
+            url = f"https://{apikey}:{password}@{hostname}/admin/api/2021-01/orders.json"
+            order = {"order": payload}
+            # print(payload)
+            try:
+                data = (requests.post(url, json=order))
+                print("+++"*30)
+                if data.status_code != 201:
+                    st.error(
+                        f"Error with #IG{shop}{str(index+starting_order_num).zfill(4)} \n code:{data.status_code} \n {data.text}")
+                    print(
+                        payload['name'] + f" success \n code:{data.status_code} \n {data.text}")
+                    break
+                else:
+                    st.success(
+                        f"Done with #IG{shop}{str(index+starting_order_num).zfill(4)}")
+                    print(payload['name'] + " success")
+            except Exception as e:
+                print(e)
+                st.error(
+                    f"Error with #IG{shop}{str(index+starting_order_num).zfill(4)} \n {e}")
+                break
+        #     print(data.text)
