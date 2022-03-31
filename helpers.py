@@ -1,7 +1,8 @@
 import pandas as pd
 import requests
 
-def get_all_orders(apikey,password,hostname):
+
+def get_all_orders(apikey, password, hostname):
     last = 0
     orders = pd.DataFrame()
     while True:
@@ -15,9 +16,10 @@ def get_all_orders(apikey,password,hostname):
             break
     return (orders)
 
+
 def get_line_items(row):
-    num_items=int(len(row)/5 + 1)
-    res_list = [] 
+    num_items = int(len(row)/5 + 1)
+    res_list = []
 
     for i in range(1, num_items):
         title = row[i*5-5]
@@ -26,11 +28,18 @@ def get_line_items(row):
         price = row[i*5-2]
         if pd.notna(title):
             res_list.append({
-                        "product_id": "4718966800480",
-                        "title": title,
-                        "name": name,
-                        "quantity": int(qty),
-                        "price": int(price)
-                        })
+                "product_id": "4718966800480",
+                "title": title,
+                "name": name,
+                "quantity": int(qty),
+                "price": int(price)
+            })
 
     return res_list
+
+
+def add_discount(df):
+    if df['Delivery Fee'] > 0:
+        df['line_items'] = df['line_items'].append(
+            {"title": 'shipping', "name": 'shipping', "quantity": 1, "price": int(df['Delivery Fee'])})
+    return df
