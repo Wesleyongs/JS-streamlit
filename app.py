@@ -16,15 +16,15 @@ if "my_saved_result" in app_state:
     last_order_num = int(float(app_state["my_saved_result"][0]))
 else:
     last_order_num = 1016
-    
+
 # Select shop
-shop = st.selectbox("JS or LV or NA", ["JS","LV","NA"])
+shop = st.selectbox("JS or LV or NA", ["JS", "LV", "NA"])
 st.write(f"Selected shop is {shop}")
 
 apikey = st.secrets[shop]['apikey']
 password = st.secrets[shop]['password']
-hostname = st.secrets[shop]['hostname']    
-    
+hostname = st.secrets[shop]['hostname']
+
 # Get Orders
 st.header("Shopee Livestream")
 start_date = st.date_input(
@@ -67,11 +67,12 @@ if query:
 # Upmesh
 st.header("Upmesh")
 
-starting_order_num = st.number_input(label="Starting Order Num", value=last_order_num, step=1)
+starting_order_num = st.number_input(
+    label="Starting Order Num", value=last_order_num, step=1)
 
 if starting_order_num:
     st.experimental_set_query_params(my_saved_result=starting_order_num)
-    
+
 livestream_file = st.file_uploader(label="Upload upmesh file here")
 
 if livestream_file:
@@ -79,48 +80,8 @@ if livestream_file:
     upload = st.button(label="Upload the following file")
     df['line_items'] = df.iloc[:, 22:].values.tolist()
     df['line_items'] = df['line_items'].apply(get_line_items)
+    df['line_items'] = np.where(df['Delivery Fee'] > 0, df['line_items'].append({"title": 'shipping', "name": 'shipping', "quantity": 1, "price": int(df['Delivery Fee'])
+                                                                                 }), df['line_items'])
     st.write(df)
 
-    if upload:
-        for index, row in df.iterrows():
-
-            payload = {}
-
-            payload['note'] = "Buyer Name: " + str(row['Buyer FB']) + "\n Delivery Method: " + str(row['Delivery Method']) +  "\n Delivery Instruction: " + str(row['Delivery Instruction'])
-            if pd.notna(row['Email']):
-                payload['email'] = row['Email']
-            payload['name'] = f"#IG{shop}{str(index+starting_order_num).zfill(4)}"
-            payload["shipping_address"] = {
-                "address1": row["Buyer Address"],
-                "phone": row["Contact No."],
-                "zip": row["Postal Code"],
-                "city": "Singapore",
-                "name": row["Delivery Name"],
-                "country": "Singapore",
-                "country_code": "SG",
-            }
-            payload['line_items'] = row['line_items']
-        #     payload["customer"] = {
-        #         "email": row['Email'],
-        #         "first_name": row["Delivery Name"]
-        #     }
-
-            # POST
-            url = f"https://{apikey}:{password}@{hostname}/admin/api/2021-01/orders.json"
-            order = {"order": payload}
-            # print(payload)
-            try:
-                data = (requests.post(url, json=order))
-                print("+++"*30)
-                if data.status_code != 201:
-                    st.error(f"Error with #IG{shop}{str(index+starting_order_num).zfill(4)} \n code:{data.status_code} \n {data.text}")
-                    print(payload['name'] + f" success \n code:{data.status_code} \n {data.text}")
-                    break
-                else:
-                    st.success(f"Done with #IG{shop}{str(index+starting_order_num).zfill(4)}")
-                    print(payload['name'] + " success")
-            except Exception as e:
-                print(e)
-                st.error(f"Error with #IG{shop}{str(index+starting_order_num).zfill(4)} \n {e}")
-                break
-        #     print(data.text)
+    
