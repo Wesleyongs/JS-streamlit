@@ -80,7 +80,11 @@ if livestream_file:
     upload = st.button(label="Upload the following file")
     df['line_items'] = df.iloc[:, 22:].values.tolist()
     df['line_items'] = df['line_items'].apply(get_line_items)
-    df['line_items'] = np.where(df['Delivery Fee'] > 0, df['line_items'].apply(add_discount), df['line_items'])
+    for idx, row in df.iterrows():
+        delivery_fee = row['Delivery Fee']
+        if delivery_fee > 0:
+            row['line_items'].append(
+                {"title": 'shipping', "name": 'shipping', "quantity": 1, "price": delivery_fee})
     st.write(df)
 
     if upload:
