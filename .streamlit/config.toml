@@ -1,3 +1,5 @@
+# Streamlit version: 1.9.0
+
 [global]
 
 # By default, Streamlit checks if the Python watchdog module is available and, if not, prints a warning asking for you to install it. The watchdog module is not required, but highly recommended. It improves Streamlit's ability to detect changes to files in your filesystem.
@@ -12,7 +14,7 @@ showWarningOnDirectExecution = true
 # DataFrame serialization.
 # Acceptable values: - 'legacy': Serialize DataFrames using Streamlit's custom format. Slow but battle-tested. - 'arrow': Serialize DataFrames using Apache Arrow. Much faster and versatile.
 # Default: "arrow"
-dataFrameSerialization = "legacy"
+dataFrameSerialization = "arrow"
 
 
 [logger]
@@ -22,7 +24,7 @@ dataFrameSerialization = "legacy"
 level = "info"
 
 # String format for logging messages. If logger.datetimeFormat is set, logger messages will default to `%(asctime)s.%(msecs)03d %(message)s`. See [Python's documentation](https://docs.python.org/2.6/library/logging.html#formatter-objects) for available attributes.
-# Default: None
+# Default: "%(asctime)s %(message)s"
 messageFormat = "%(asctime)s %(message)s"
 
 
@@ -48,8 +50,7 @@ showErrorDetails = true
 # Default: true
 magicEnabled = true
 
-# Install a Python tracer to allow you to stop or pause your script at any point and introspect it. As a side-effect, this slows down your script's 
-execution.
+# Install a Python tracer to allow you to stop or pause your script at any point and introspect it. As a side-effect, this slows down your script's execution.
 # Default: false
 installTracer = false
 
@@ -60,6 +61,10 @@ fixMatplotlib = true
 # Run the Python Garbage Collector after each script execution. This can help avoid excess memory use in Streamlit apps, but could introduce delay in rerunning the app script for high-memory-use applications.
 # Default: true
 postScriptGC = true
+
+# Handle script rerun requests immediately, rather than waiting for script execution to reach a yield point. Enabling this will make Streamlit much more responsive to user interaction, but it can lead to race conditions in apps that mutate session_state data outside of explicit session_state assignment statements.
+# Default: false
+fastReruns = false
 
 
 [server]
@@ -77,10 +82,10 @@ fileWatcherType = "auto"
 
 # Symmetric key used to produce signed cookies. If deploying on multiple replicas, this should be set to the same value across all replicas to ensure they all share the same secret.
 # Default: randomly generated secret key.
-cookieSecret = "62b805be297c063fd237dcecdfbe4edd1b299bb6c9b20048d040fed6e59f833a"
+cookieSecret =
 
 # If false, will attempt to open a browser window on start.
-# Default: false unless (1) we are on a Linux box where DISPLAY is unset, or (2) server.liveSave is set.
+# Default: false unless (1) we are on a Linux box where DISPLAY is unset, or (2) we are running in the Streamlit Atom plugin.
 headless = false
 
 # Automatically rerun script when the file is modified on disk.
@@ -89,7 +94,7 @@ runOnSave = false
 
 # The address where the server will listen for client and browser connections. Use this if you want to bind the server to a specific address. If set, the server will only be accessible from this address, and not from any aliases (like localhost).
 # Default: (unset)
-#address =
+# address =
 
 # The port where the server will listen for browser connections.
 # Default: 8501
@@ -113,15 +118,19 @@ enableXsrfProtection = true
 # Default: 200
 maxUploadSize = 200
 
+# Max size, in megabytes, of messages that can be sent via the WebSocket connection.
+# Default: 200
+maxMessageSize = 200
+
 # Enables support for websocket compression.
-# Default: true
-enableWebsocketCompression = true
+# Default: false
+enableWebsocketCompression = false
 
 
 [browser]
 
 # Internet address where users should point their browsers in order to connect to the app. Can be IP address or DNS name and path.
-# This is used to: - Set the correct URL for CORS and XSRF protection purposes. - Show the URL on the terminal - Open the browser - Tell the browser where to connect to the server when in liveSave mode.
+# This is used to: - Set the correct URL for CORS and XSRF protection purposes. - Show the URL on the terminal - Open the browser
 # Default: 'localhost'
 serverAddress = "localhost"
 
@@ -130,7 +139,7 @@ serverAddress = "localhost"
 gatherUsageStats = true
 
 # Port where users should point their browsers in order to connect to the app.
-# This is used to: - Set the correct URL for CORS and XSRF protection purposes. - Show the URL on the terminal - Open the browser - Tell the browser where to connect to the server when in liveSave mode.
+# This is used to: - Set the correct URL for CORS and XSRF protection purposes. - Show the URL on the terminal - Open the browser
 # Default: whatever value is set in server.port.
 serverPort = 8501
 
@@ -153,57 +162,22 @@ showfileUploaderEncoding = true
 showPyplotGlobalUse = true
 
 
-[s3]
-
-# Name of the AWS S3 bucket to save apps.
-# Default: (unset)
-#bucket =
-
-# URL root for external view of Streamlit apps.
-# Default: (unset)
-#url =
-
-# Access key to write to the S3 bucket.
-# Leave unset if you want to use an AWS profile.
-# Default: (unset)
-#accessKeyId =
-
-# Secret access key to write to the S3 bucket.
-# Leave unset if you want to use an AWS profile.
-# Default: (unset)
-#secretAccessKey =
-
-# The "subdirectory" within the S3 bucket where to save apps.
-# S3 calls paths "keys" which is why the keyPrefix is like a subdirectory. Use "" to mean the root directory.
-# Default: ""
-keyPrefix = ""
-
-# AWS region where the bucket is located, e.g. "us-west-2".
-# Default: (unset)
-#region =
-
-# AWS credentials profile to use.
-# Leave unset to use your default profile.
-# Default: (unset)
-#profile =
-
-
 [theme]
 
 # The preset Streamlit theme that your custom theme inherits from. One of "light" or "dark".
-#base =
+# base =
 
 # Primary accent color for interactive elements.
-#primaryColor =
+# primaryColor =
 
 # Background color for the main content area.
-#backgroundColor =
+# backgroundColor =
 
 # Background color used for the sidebar and most interactive widgets.
-#secondaryBackgroundColor =
+# secondaryBackgroundColor =
 
 # Color used for almost all text.
-#textColor =
+# textColor =
 
 # Font family for all text in the app, except code blocks. One of "sans serif", "serif", or "monospace".
-#font =
+# font =
