@@ -83,7 +83,7 @@ if starting_order_num:
 livestream_file = st.file_uploader(label="Upload upmesh file here")
 
 if livestream_file:
-    df = pd.read_csv(livestream_file)
+    df = pd.read_csv(livestream_file, engine='python')
     upload = st.button(label="Upload the following file")
     df['line_items'] = df.iloc[:, 22:].values.tolist()
     df['line_items'] = df['line_items'].apply(get_line_items)
