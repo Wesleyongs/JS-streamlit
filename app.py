@@ -1,9 +1,12 @@
-import streamlit as st
-import pandas as pd
-import numpy as np
-import re
-import requests
 import datetime as dt
+import os
+import re
+
+import numpy as np
+import pandas as pd
+import requests
+
+import streamlit as st
 from helpers import *
 
 # Page config
@@ -24,6 +27,10 @@ st.write(f"Selected shop is {shop}")
 apikey = st.secrets[shop]['apikey']
 password = st.secrets[shop]['password']
 hostname = st.secrets[shop]['hostname']
+
+# apikey = os.getenv('apikey')
+# password = os.getenv('password')
+# hostname = os.getenv('hostname')
 
 # Get Orders
 st.header("Shopee Livestream")
