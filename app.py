@@ -10,6 +10,7 @@ import streamlit as st
 from helpers import *
 
 # Page config
+dataFrameSerialization = "legacy"
 st.set_page_config(page_title='Jamstones Post live',
                    page_icon="Jam.Stones.png", initial_sidebar_state='auto')
 
