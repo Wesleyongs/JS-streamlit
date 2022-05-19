@@ -91,6 +91,7 @@ if livestream_file:
         if delivery_fee > 0:
             row['line_items'].append(
                 {"title": 'shipping', "name": 'shipping', "quantity": 1, "price": delivery_fee})
+    df = df.fillna('')
     st.write(df)
     upload = st.button(label="Upload the following file")
 
