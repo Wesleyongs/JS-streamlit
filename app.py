@@ -10,7 +10,6 @@ import streamlit as st
 from helpers import *
 
 # Page config
-dataFrameSerialization = "legacy"
 st.set_page_config(page_title='Jamstones Post live',
                    page_icon="Jam.Stones.png", initial_sidebar_state='auto')
 
@@ -100,7 +99,7 @@ if livestream_file:
 
             payload = {}
 
-            payload['note'] = "Buyer Name: " + str(row['Buyer FB']) + "\n Delivery Method: " + str(
+            payload['note'] = "ï»¿Buyer Name: " + str(row['Buyer FB']) + "\n Delivery Method: " + str(
                 row['Delivery Method']) + "\n Delivery Instruction: " + str(row['Delivery Instruction'])
             if pd.notna(row['Email']):
                 payload['email'] = row['Email']
