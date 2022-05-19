@@ -84,7 +84,6 @@ livestream_file = st.file_uploader(label="Upload upmesh file here")
 
 if livestream_file:
     df = pd.read_csv(livestream_file, encoding='latin1')
-    upload = st.button(label="Upload the following file")
     df['line_items'] = df.iloc[:, 22:].values.tolist()
     df['line_items'] = df['line_items'].apply(get_line_items)
     for idx, row in df.iterrows():
@@ -93,6 +92,7 @@ if livestream_file:
             row['line_items'].append(
                 {"title": 'shipping', "name": 'shipping', "quantity": 1, "price": delivery_fee})
     st.write(df)
+    upload = st.button(label="Upload the following file")
 
     if upload:
         for index, row in df.iterrows():
@@ -140,5 +140,7 @@ if livestream_file:
                 print(e)
                 st.error(
                     f"Error with #IG{shop}{str(index+starting_order_num).zfill(4)} \n {e}")
+                st.write(payload)
+                print(payload)
                 break
         #     print(data.text)
