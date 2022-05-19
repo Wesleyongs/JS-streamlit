@@ -99,7 +99,7 @@ if livestream_file:
 
             payload = {}
 
-            payload['note'] = "ï»¿Buyer Name: " + str(row['Buyer FB']) + "\n Delivery Method: " + str(
+            payload['note'] = "Buyer Name: " + str(row['ï»¿Buyer FB']) + "\n Delivery Method: " + str(
                 row['Delivery Method']) + "\n Delivery Instruction: " + str(row['Delivery Instruction'])
             if pd.notna(row['Email']):
                 payload['email'] = row['Email']
