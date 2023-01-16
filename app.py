@@ -94,6 +94,7 @@ if livestream_file:
                            ])
     st.write(df.shape)
     df = df.fillna('')
+    st.write(df['line_items'])
     df = df.apply(add_discount, axis=1)
     st.write(df)
     upload = st.button(label="Upload the following file")
