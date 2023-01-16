@@ -28,10 +28,6 @@ apikey = st.secrets[shop]['apikey']
 password = st.secrets[shop]['password']
 hostname = st.secrets[shop]['hostname']
 
-# apikey = os.getenv('apikey')
-# password = os.getenv('password')
-# hostname = os.getenv('hostname')
-
 # Get Orders
 st.header("Shopee Livestream")
 start_date = st.date_input(
@@ -79,6 +75,8 @@ starting_order_num = st.number_input(
 
 if starting_order_num:
     st.experimental_set_query_params(my_saved_result=starting_order_num)
+    
+order_name_prefix = st.text_input("Order name prefit, I.E #NA or #NAIG or #JS etc")
 
 livestream_file = st.file_uploader(label="Upload upmesh file here")
 
@@ -104,7 +102,7 @@ if livestream_file:
                 row['Delivery Method']) + "\n Delivery Instruction: " + str(row['Delivery Instruction'])
             if pd.notna(row['Email']):
                 payload['email'] = row['Email']
-            payload['name'] = f"#IG{shop}{str(index+starting_order_num).zfill(4)}"
+            payload['name'] = f"{order_name_prefix}{str(index+starting_order_num).zfill(4)}"
             payload["shipping_address"] = {
                 "address1": row["Buyer Address"],
                 "phone": row["Contact No."],
@@ -121,9 +119,10 @@ if livestream_file:
         #     }
 
             # POST
-            url = f"https://{apikey}:{password}@{hostname}/admin/api/2021-01/orders.json"
+            url = f"https://{apikey}:{password}@{hostname}/admin/api/2023-01/orders.json"
             order = {"order": payload}
             # print(payload)
+            print(url)
             try:
                 data = (requests.post(url, json=order))
                 print("+++"*30)
@@ -131,7 +130,7 @@ if livestream_file:
                     st.error(
                         f"Error with #IG{shop}{str(index+starting_order_num).zfill(4)} \n code:{data.status_code} \n {data.text}")
                     print(
-                        payload['name'] + f" success \n code:{data.status_code} \n {data.text}")
+                        payload['name'] + f" payload success compiled, request invalid \n code:{data.status_code} \n {data.text}")
                     break
                 else:
                     st.success(
