@@ -75,8 +75,9 @@ starting_order_num = st.number_input(
 
 if starting_order_num:
     st.experimental_set_query_params(my_saved_result=starting_order_num)
-    
-order_name_prefix = st.text_input("Order name prefit, I.E #NA or #NAIG or #JS etc")
+
+order_name_prefix = st.text_input(
+    "Order name prefix, I.E #NA or #NAIG or #JS etc")
 
 livestream_file = st.file_uploader(label="Upload upmesh file here")
 
@@ -89,7 +90,11 @@ if livestream_file:
         if delivery_fee > 0:
             row['line_items'].append(
                 {"title": 'shipping', "name": 'shipping', "quantity": 1, "price": delivery_fee})
+    df = df.dropna(subset=["Cart ID",	"Email",	"Delivery Name",	"Buyer Address",	"Postal Code",
+                           ])
+    st.write(df.shape)
     df = df.fillna('')
+    df = df.apply(add_discount, axis=1)
     st.write(df)
     upload = st.button(label="Upload the following file")
 
@@ -119,10 +124,10 @@ if livestream_file:
         #     }
 
             # POST
+            print(payload)
             url = f"https://{apikey}:{password}@{hostname}/admin/api/2023-01/orders.json"
             order = {"order": payload}
-            # print(payload)
-            print(url)
+            # print(url)
             try:
                 data = (requests.post(url, json=order))
                 print("+++"*30)
@@ -135,6 +140,7 @@ if livestream_file:
                 else:
                     st.success(
                         f"Done with #IG{shop}{str(index+starting_order_num).zfill(4)}")
+                    st.write(payload)
                     print(payload['name'] + " success")
             except Exception as e:
                 print(e)
