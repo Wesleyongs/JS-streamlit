@@ -91,10 +91,11 @@ if livestream_file:
             row['line_items'].append(
                 {"title": 'shipping', "name": 'shipping', "quantity": 1, "price": delivery_fee})
     df = df.dropna(subset=["Cart ID",	"Email",	"Delivery Name",	"Buyer Address",	"Postal Code",
-                           ])
+                           ], how='all')
     df = df.fillna('')
     df = df.apply(add_discount, axis=1)
     st.write(df)
+    st.write(df.shape)
     upload = st.button(label="Upload the following file")
 
     if upload:
