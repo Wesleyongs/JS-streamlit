@@ -33,20 +33,20 @@ def get_line_items(row):
                 "title": title,
                 "name": name,
                 "quantity": int(qty),
-                "price": int(price)
+                "price": float(price)
             })
 
     return res_list
 
 
 def add_discount(df):
-    if int(df['Promo Deduction']) > 0:
+    if float(df['Promo Deduction']) > 0:
         df['line_items'].append(
             {
                 "product_id": "4718966800480",
                 "title": df['Promo Code'],
                 "name": df['Promo Code'],
                 "quantity": 1,
-                "price": -int(df['Promo Deduction'])
+                "price": -float(df['Promo Deduction'])
             })
     return df
