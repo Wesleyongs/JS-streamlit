@@ -14,4 +14,4 @@ showWarningOnDirectExecution = true
 # DataFrame serialization.
 # Acceptable values: - 'legacy': Serialize DataFrames using Streamlit's custom format. Slow but battle-tested. - 'arrow': Serialize DataFrames using Apache Arrow. Much faster and versatile.
 # Default: "arrow"
-dataFrameSerialization = "legacy"
+dataFrameSerialization = "arrow"
