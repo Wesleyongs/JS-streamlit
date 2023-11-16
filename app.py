@@ -100,9 +100,20 @@ if livestream_file:
         for index, row in df.iterrows():
 
             payload = {}
-
-            payload['note'] = "Buyer Name: " + str(row['ï»¿Buyer FB']) + "\n Delivery Method: " + str(
-                row['Delivery Method']) + "\n Delivery Instruction: " + str(row['Delivery Instruction'])
+            if "ï»¿Buyer FB" in row:
+                buyer_fb_row_name = "ï»¿Buyer FB"
+            else:
+                buyer_fb_row_name = "Buyer FB"
+            # break
+            payload["note"] = (
+                "Buyer Name: "
+                + str(row[buyer_fb_row_name])
+                + "\n Delivery Method: "
+                + str(row["Delivery Method"])
+                + "\n Delivery Instruction: "
+                + str(row["Delivery Instruction"])
+            )
+            
             if pd.notna(row['Email']):
                 payload['email'] = row['Email']
             payload['name'] = f"{order_name_prefix}{str(index+starting_order_num).zfill(4)}"
